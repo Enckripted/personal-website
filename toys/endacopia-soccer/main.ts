@@ -2,9 +2,11 @@ const TARGET_FPS = 30
 
 const BALL_FRAMES = 20
 const HIT_WINDOW = 3
+const MAX_EXTRA_HIT_FRAMES = 5
 
-const AUDIO_START = 3
-const AUDIO_INC = 0.05
+const MUSIC_START = 5
+const MUSIC_VOL_INC = 0.05
+const SPOTLIGHT_START = 26 //this might be based on the music in game but i dont wanna do all that
 
 const LSTORAGE_KEY = "best"
 
@@ -18,38 +20,35 @@ let curGameCooldown = 0
 let running = false
 let stopped = true
 
+let debugMode = false
+let extraHitFrames = 0
+
 const musicElement = document.getElementById("music") as HTMLMediaElement
 const kickSfxElement = document.getElementById("kick") as HTMLMediaElement
 const failSfxElement = document.getElementById("fail") as HTMLMediaElement
-failSfxElement.volume = 0.6
+const spotlightSfxElement = document.getElementById("spotlight-sfx") as HTMLMediaElement
+failSfxElement.volume = 0.4
+
+function playAudio(audioElement: HTMLMediaElement) {
+	audioElement.fastSeek(0)
+	audioElement.play()
+}
 
 function playMusic() {
-	musicElement.fastSeek(0)
-	musicElement.play()
+	playAudio(musicElement)
 }
 
 function stopMusic() {
 	musicElement.pause()
 }
 
-function setVolume(vol: number) {
+function setMusicVolume(vol: number) {
 	audioVolume = Math.min(1, Math.max(vol, 0))
 	musicElement.volume = audioVolume
 }
 
-function playKickSound() {
-	kickSfxElement.fastSeek(0)
-	kickSfxElement.play()
-}
-
-//i should have made a general function for these but idrc atp
-function playFailSound() {
-	failSfxElement.fastSeek(0)
-	failSfxElement.play()
-}
-
-function stopAnims() {
-	stopped = true
+function cheated() {
+	return debugMode || extraHitFrames > 0
 }
 
 function startGame() {
@@ -60,14 +59,15 @@ function startGame() {
 	running = true
 	stopped = false
 
-	playKickSound()
+	playAudio(kickSfxElement)
 }
 
 function endGame() {
 	stopMusic()
-	setVolume(0)
+	setMusicVolume(0)
+	turnOffSpotlight()
 	if (score > 2)
-		playFailSound()
+		playAudio(failSfxElement)
 
 	score = 0
 	running = false
@@ -75,10 +75,14 @@ function endGame() {
 	localStorage.setItem(LSTORAGE_KEY, bestScore.toString())
 }
 
+function stopLoseAnim() {
+	stopped = true
+}
+
 function kick() {
 	//if not in hit window, fail
 	console.log("kick at frame " + ballFrame)
-	if (ballFrame <= BALL_FRAMES - HIT_WINDOW) {
+	if (ballFrame <= BALL_FRAMES - HIT_WINDOW - extraHitFrames) {
 		console.log("too early, fail")
 		endGame()
 		return
@@ -86,8 +90,15 @@ function kick() {
 
 	ballFrame = 0
 	score += 1
-	bestScore = Math.max(score, bestScore)
-	playKickSound()
+
+	if (score == MUSIC_START)
+		playMusic()
+	if (score == SPOTLIGHT_START)
+		turnOnSpotlight()
+
+	if (!cheated)
+		bestScore = Math.max(score, bestScore)
+	playAudio(kickSfxElement)
 }
 
 function tick() {
@@ -99,7 +110,7 @@ function tick() {
 
 	if (!running && ballFrame >= BALL_FRAMES + 6) {
 		console.log("stop lose anim")
-		stopAnims()
+		stopLoseAnim()
 	}
 	if (running && ballFrame >= BALL_FRAMES) { //running means game still playing
 		console.log("too late, fail")
@@ -107,8 +118,34 @@ function tick() {
 	}
 }
 
+const scoreEl = document.getElementById("score")!
+const bestEl = document.getElementById("best-score")!
+const spotlightEl = document.getElementById("spotlight")!
+const mellow = document.getElementById("mellow") as HTMLImageElement
+const dbgTogEl = document.getElementById("dbg-toggle")!
+const dbgHitTogEl = document.getElementById("dbg-hit-toggle")!
+
+function turnOnSpotlight() {
+	spotlightEl.style.visibility = "visible"
+	playAudio(spotlightSfxElement)
+}
+
+function turnOffSpotlight() {
+	spotlightEl.style.visibility = "hidden"
+}
+
+function positionSpotlight() {
+	const mellowRect = mellow.getBoundingClientRect()
+	spotlightEl.style.setProperty("--x", `${mellowRect.left + mellowRect.width / 2}px`)
+	spotlightEl.style.setProperty("--y", `${mellowRect.top + mellowRect.height / 2}px`)
+}
+
+window.addEventListener("resize", positionSpotlight)
+window.addEventListener("scroll", positionSpotlight)
+positionSpotlight()
+
 function draw() {
-	const mellow = document.getElementById("mellow") as HTMLImageElement
+
 	let img = "idle.png"
 	if (running || (!stopped && ballFrame < 21))
 		img = `main${Math.floor(ballFrame / 3)}.png`
@@ -117,34 +154,57 @@ function draw() {
 	}
 	mellow.src = `img/${img}`
 
-	//start playing a bit earlier than the real game to sync the "you're the soccer ball!"
-	if (running && score == AUDIO_START && audioVolume == 0)
-		playMusic()
-	setVolume((score - AUDIO_START) * AUDIO_INC) //gets clamped by setVolume
 
-	document.getElementById("score")!.innerHTML = score.toString()
-	document.getElementById("best-score")!.innerHTML = bestScore.toString()
-	/*
+	setMusicVolume((score - MUSIC_START) * MUSIC_VOL_INC) //gets clamped by setVolume
+
+	scoreEl.innerHTML = score.toString()
+	bestEl.innerHTML = bestScore.toString()
+
+	dbgTogEl.innerHTML = `DEBUG MODE: ${debugMode ? "ON" : "OFF"}`
+
 	let debugText = document.getElementById("dbg-mellow-state")!;
 	debugText.innerHTML = `frame ${ballFrame} - running ${running}`;
-  
-	document.getElementById("dbg-canplay")!.innerHTML =
-	  curGameCooldown > 0 ? "WAIT TO PLAY" : "";*/
+	debugText.style.color = (!running || ballFrame <= BALL_FRAMES - HIT_WINDOW) ? "white" : "green"
+	debugText.style.visibility = debugMode ? "visible" : "hidden";
+}
+
+//don't change settings during run
+dbgTogEl.addEventListener("click", () => {
+	if (running) return
+	debugMode = !debugMode
+	dbgTogEl.style.color = debugMode ? "red" : "white"
+})
+dbgHitTogEl.innerHTML = "EXTRA HIT FRAMES: 0"
+dbgHitTogEl.addEventListener("click", () => {
+	if (running) return
+	extraHitFrames = (extraHitFrames + 1) % (MAX_EXTRA_HIT_FRAMES + 1)
+	dbgHitTogEl.innerHTML = `EXTRA HIT FRAMES: ${extraHitFrames}`
+	dbgHitTogEl.style.color = extraHitFrames > 0 ? "red" : "white"
+})
+
+function hitActionButton() {
+	if (running) kick()
+	else if (stopped) startGame()
 }
 
 function onKeyDown(event: KeyboardEvent) {
 	switch (event.key) {
 		case " ":
-			if (running) kick()
-			else if (stopped) startGame()
+			hitActionButton()
 			break
 	}
+}
+
+function onMouseClick() {
+	if (!stopped) hitActionButton()
 }
 
 if (localStorage.getItem(LSTORAGE_KEY))
 	bestScore = parseInt(localStorage.getItem(LSTORAGE_KEY)!)
 
 addEventListener("keydown", onKeyDown)
+addEventListener("mousedown", onMouseClick)
+mellow.addEventListener("click", () => { if (!running) startGame() })
 setInterval(() => {
 	tick()
 	draw()

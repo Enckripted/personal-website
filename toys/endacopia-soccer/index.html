@@ -14,9 +14,8 @@
 		<h1 class="pb-1 text-4xl font-bold">endacopia soccer</h1>
 		<div class="flex mb-5">
 			<div class="flex-7 flex-col items-center justify-end">
-				<img id="mellow" width="300" height="300" src="./img/main1.png" />
-				<p class="hidden" id="dbg-mellow-state">game not started</p>
-				<p class="hidden" id="dbg-canplay"></p>
+				<div class="pointer-events-none" id="spotlight"></div>
+				<img class="cursor-pointer" id="mellow" width="300" height="300" src="./img/main1.png" />
 			</div>
 			<div class="flex justify-center flex-5 flex-col">
 				<div class="flex gap-0.5">
@@ -30,8 +29,16 @@
 
 			</div>
 		</div>
+		<p id="dbg-mellow-state"></p>
 
-		<p>space/mouse click to start game</p>
+		<div class="mb-5">
+			<p class="mb-1">hit space or click on mellow to start game</p>
+			<p>extra options: (click to toggle)</p>
+			<p class="underline select-none cursor-pointer" id="dbg-toggle">DEBUG MODE: OFF</p>
+			<p class="underline select-none cursor-pointer" id="dbg-hit-toggle">DEBUG MODE: OFF</p>
+		</div>
+
+
 		<h3>Credits:</h3>
 		<p>Most assets from game Endacopia, ripped using <a href="https://github.com/adm244/AGSUnpacker"
 				target="_blank">AGSUnpacker</a>
@@ -42,6 +49,7 @@
 				target="_blank">Record scratch
 				sound</a> from Pixabay (this ones bad im sorry)</p>
 	</div>
+
 	<audio id="music">
 		<source src="./snd/soccerball.wav" type="audio/wav" />
 	</audio>
@@ -50,6 +58,9 @@
 	</audio>
 	<audio id="fail">
 		<source src="./snd/fail.wav" type="audio/wav" />
+	</audio>
+	<audio id="spotlight-sfx">
+		<source src="./snd/spotlight.ogg" type="audio/ogg" />
 	</audio>
 	<script src="./main.ts"></script>
 </body>
@@ -79,6 +90,15 @@
 	a {
 		color: #0000EE;
 		text-decoration: underline;
+	}
+
+	#spotlight {
+		position: fixed;
+		inset: 0;
+		visibility: hidden;
+		background: radial-gradient(circle at var(--x, 0px) var(--y, 0px),
+				#00000000 100px,
+				#000000cc 350px);
 	}
 </style>
 
