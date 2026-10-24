@@ -1,39 +1,85 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="stylesheet" href="/src/style.css" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>kick the ball</title>
-	</head>
 
-	<body class="bg-black text-white">
-		<div class="w-lg h-96 p-10 m-auto">
-			<h1 class="pb-5 text-4xl font-bold">become the soccer ball</h1>
-			<div class="flex">
-				<div class="flex-7 flex-col">
-					<img
-						id="mellow"
-						width="300"
-						height="300"
-						src="./img/main1.png"
-					/>
-					<p class="hidden" id="dbg-mellow-state">game not started</p>
-					<p class="hidden" id="dbg-canplay"></p>
-				</div>
-				<div class="flex flex-5 flex-col">
-					<h3 class="text-xl font-bold">Score:</h3>
-					<h5 class="text-lg text-orange-400" id="score">score: 0</h5>
-					<h3 class="text-xl font-bold">Best Score:</h3>
-					<h5 class="text-lg text-green-500" id="best-score">
-						best: 0
-					</h5>
-				</div>
+<head>
+	<meta charset="UTF-8" />
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	<link rel="stylesheet" href="/src/style.css" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>kick the ball</title>
+</head>
+
+<body class="bg-black text-white">
+	<div class="w-xl h-96 p-10 m-auto">
+		<h1 class="pb-1 text-4xl font-bold">endacopia soccer</h1>
+		<div class="flex mb-5">
+			<div class="flex-7 flex-col items-center justify-end">
+				<img id="mellow" width="300" height="300" src="./img/main1.png" />
+				<p class="hidden" id="dbg-mellow-state">game not started</p>
+				<p class="hidden" id="dbg-canplay"></p>
 			</div>
+			<div class="flex justify-center flex-5 flex-col">
+				<div class="flex gap-0.5">
+					<h3 class="text-xl font-bold">SCORE:</h3>
+					<span class="text-xl pt-0.5" id="score">0</span>
+				</div>
+				<div class="flex gap-0.5 text-green-500">
+					<h3 class="text-xl font-bold">HI-SCORE:</h3>
+					<span class="text-xl pt-0.5" id="best-score">0</span>
+				</div>
 
-			<p>use space to kick and start the game!</p>
+			</div>
 		</div>
-		<script src="./main.ts"></script>
-	</body>
+
+		<p>space/mouse click to start game</p>
+		<h3>Credits:</h3>
+		<p>Most assets from game Endacopia, ripped using <a href="https://github.com/adm244/AGSUnpacker"
+				target="_blank">AGSUnpacker</a>
+		</p>
+		<p><a href="https://pixabay.com/sound-effects/film-special-effects-soccer-kick-6235/" target="_blank">Kick
+				sound</a> from Pixabay</p>
+		<p><a href="https://pixabay.com/sound-effects/film-special-effects-record-scratches-31350/"
+				target="_blank">Record scratch
+				sound</a> from Pixabay (this ones bad im sorry)</p>
+	</div>
+	<audio id="music">
+		<source src="./snd/soccerball.wav" type="audio/wav" />
+	</audio>
+	<audio id="kick">
+		<source src="./snd/kick.mp3" type="audio/mp3" />
+	</audio>
+	<audio id="fail">
+		<source src="./snd/fail.wav" type="audio/wav" />
+	</audio>
+	<script src="./main.ts"></script>
+</body>
+<style>
+	@font-face {
+		font-family: font0;
+		src: url("font0.ttf");
+	}
+
+	@font-face {
+		font-family: font1;
+		src: url("font1.ttf");
+	}
+
+	h1,
+	h2,
+	h3,
+	p,
+	a {
+		font-family: font0;
+	}
+
+	span {
+		font-family: font1;
+	}
+
+	a {
+		color: #0000EE;
+		text-decoration: underline;
+	}
+</style>
+
 </html>
