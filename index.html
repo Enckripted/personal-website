@@ -5,26 +5,44 @@
 	<meta charset="UTF-8" />
 	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>personal-website</title>
+	<title>my website!</title>
 </head>
 
-<body class="text-center bg-gray-300">
+<body class="bg-gray-300">
 	<div class="flex flex-col gap-5 w-2xl p-10 mx-auto">
 		<div>
-			<h1 class="text-2xl font-extrabold">welcome to my website!</h1>
+			<h1 class="text-2xl font-extrabold">Welcome to my personal website!</h1>
+			<h2 class="font-bold">Currently project: Canvas-based 4k VSRG</h2>
 			<p>
-				i want to start making more things and whatever i finish
-				will go here
-			</p>
+				I made this website because I want to start making more programming projects, and I need somewhere to
+				put them. When I'm not working on dev stuff, my hobbies include running and competitive programming. I
+				also play a lot of rhythm games and Team Fortress 2.</p>
+
+
 		</div>
 		<div>
 			<h3 class="text-xl font-bold">Tools/Toys</h3>
-			<p>(aka stuff i made in a really short amount of time)</p>
+			<p class="mb-2">(aka stuff I made in a shorter amount of time)</p>
 
-			<a href="/toys/endacopia-soccer/">endacopia soccer</a>
+			<div class="flex flex-col">
+				<div>
+					<a href="/toys/endacopia-soccer/">Endacopia Soccer Minigame</a>
+					<p>This is an attempt to reimplement the endacopia soccer minigame in the browser. The timing is
+						still a bit off, which I hope to fix later. Last updated 10/24/26.</p>
+				</div>
+			</div>
+		</div>
+		<div class="flex justify-center">
+			<img width="250" height="250" src="public/hug.png" />
 		</div>
 	</div>
 	<script type="module" src="/src/main.ts"></script>
 </body>
+<style>
+	a {
+		color: #0000EE;
+		text-decoration: underline;
+	}
+</style>
 
 </html>
