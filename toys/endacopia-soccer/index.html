@@ -26,22 +26,28 @@
 					<h3 class="text-xl font-bold">HI-SCORE:</h3>
 					<span class="text-xl pt-0.5" id="best-score">0</span>
 				</div>
-
+				<div class="flex gap-0.5">
+					<img id="medal0" class="medal" width="34" height="68" src="img/medal0.png" />
+					<img id="medal1" class="medal" width="34" height="68" src="img/medal1.png" />
+					<img id="medal2" class="medal" width="34" height="68" src="img/medal2.png" />
+				</div>
 			</div>
 		</div>
 		<p id="dbg-mellow-state"></p>
 
 		<div class="mb-5">
-			<p class="mb-1">hit space or click on mellow to start game</p>
+			<p class="">hit space or click on mellow to start game</p>
+			<p class="mb-1">space or click to kick</p>
 			<p>extra options: (click to toggle)</p>
-			<p class="underline select-none cursor-pointer" id="dbg-toggle">DEBUG MODE: OFF</p>
-			<p class="underline select-none cursor-pointer" id="dbg-hit-toggle">DEBUG MODE: OFF</p>
+			<p class=" underline select-none cursor-pointer" id="dbg-toggle">DEBUG MODE: OFF</p>
+			<p class=" underline select-none cursor-pointer" id="dbg-hit-toggle">EXTRA FRAMES: 0</p>
+			<p class=" underline select-none cursor-pointer" id="dbg-auto-toggle">AUTOPLAY: OFF</p>
 		</div>
 
 
 		<h3>Credits:</h3>
-		<p>Most assets from game Endacopia, ripped using <a href="https://github.com/adm244/AGSUnpacker"
-				target="_blank">AGSUnpacker</a>
+		<p>All assets from the Endacopia game and ripped using <a href="https://github.com/adm244/AGSUnpacker"
+				target="_blank">AGSUnpacker</a> except for some sounds I couldn't find
 		</p>
 		<p><a href="https://pixabay.com/sound-effects/film-special-effects-soccer-kick-6235/" target="_blank">Kick
 				sound</a> from Pixabay</p>
@@ -99,6 +105,11 @@
 		background: radial-gradient(circle at var(--x, 0px) var(--y, 0px),
 				#00000000 100px,
 				#000000cc 350px);
+	}
+
+	/* prevent flash of medals */
+	.medal {
+		visibility: hidden;
 	}
 </style>
 
