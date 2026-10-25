@@ -193,7 +193,7 @@ class RowIterator{
 	}
 }
 
-async function readChart(simFile: File): Promise<Chart> {
+async function readChart(simFile: File | Response): Promise<Chart> {
 	const fileData = await simFile.text().then()
 	return new Chart(fileData)
 }

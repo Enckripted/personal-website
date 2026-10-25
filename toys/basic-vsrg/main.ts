@@ -46,15 +46,12 @@ function draw() {
 //canvas is currently 400x700
 setInterval(draw)
 
-const filein = document.querySelector("#filein") as HTMLInputElement
-const filesub = document.querySelector("#filesub") as HTMLButtonElement
-filesub.addEventListener("click", () => {
-	const files = filein.files
-	if(!files || files.length === 0) return
-	readChart(files[0]).then((chart) => curChart = chart)
-})
-
 let curChart: Chart | undefined
+fetch("Superheroes.sm").then((res) => {
+	readChart(res).then((chart) => {
+		curChart = chart
+	})
+})
 
 document.querySelector("#play")?.addEventListener("click", () => {
 	if(!curChart) return
