@@ -158,7 +158,7 @@ function draw() {
 	else if (!stopped) {//we lost but need to finish animations (ball frame >= 21)
 		img = `lose${Math.floor((ballFrame - 21) / 3)}.png`
 	}
-	mellow.src = `img/${img}`
+	mellow.src = `/endacopia-soccer/img/${img}`
 
 
 	setMusicVolume((score - MUSIC_START) * MUSIC_VOL_INC) //gets clamped by setVolume

@@ -47,7 +47,7 @@ function draw() {
 setInterval(draw)
 
 let curChart: Chart | undefined
-fetch("Superheroes.sm").then((res) => {
+fetch("/Superheroes.sm").then((res) => {
 	readChart(res).then((chart) => {
 		curChart = chart
 	})
