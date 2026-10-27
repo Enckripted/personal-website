@@ -177,21 +177,21 @@ function draw() {
 
 //don't change settings during run
 dbgTogEl.addEventListener("click", () => {
-	if (running) return
+	if (!autoplay && running) return
 	debugMode = !debugMode
 	dbgTogEl.innerHTML = `DEBUG MODE: ${debugMode ? "ON" : "OFF"}`
 	dbgTogEl.style.color = debugMode ? "red" : "white"
 })
 dbgHitTogEl.innerHTML = "EXTRA HIT FRAMES: 0"
 dbgHitTogEl.addEventListener("click", () => {
-	if (running) return
+	if (!autoplay && running) return
 	extraHitFrames = (extraHitFrames + 1) % (MAX_EXTRA_HIT_FRAMES + 1)
 	dbgHitTogEl.innerHTML = `EXTRA HIT FRAMES: ${extraHitFrames}`
 	dbgHitTogEl.style.color = extraHitFrames > 0 ? "red" : "white"
 })
 dbgAutoTogEl.innerHTML = "AUTOPLAY: OFF"
 dbgAutoTogEl.addEventListener("click", () => {
-	if (running) return
+	if (!autoplay && running) return
 	autoplay = !autoplay
 	autoplayWasEnabled = autoplay || autoplayWasEnabled
 	dbgAutoTogEl.innerHTML = `AUTOPLAY: ${autoplay ? "ON" : "OFF"}`
@@ -200,6 +200,7 @@ dbgAutoTogEl.addEventListener("click", () => {
 
 
 function hitActionButton() {
+	if (autoplay) return
 	if (running) kick()
 	else if (stopped) startGame()
 }
